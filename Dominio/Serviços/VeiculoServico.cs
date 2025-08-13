@@ -1,51 +1,59 @@
+// Arquivo: Dominio/Servicos/VeiculoServico.cs
+
 using Microsoft.EntityFrameworkCore;
 using MinimalApi.Dominio.Entidades;
 using MinimalApi.Dominio.Interfaces;
-using MinimalApi.DTOs;
 using MinimalApi.Infraestrutura.Db;
+
 namespace MinimalApi.Dominio.Servicos;
 
 public class VeiculoServico : IVeiculoServico
 {
     private readonly DbContexto _contexto;
+
     public VeiculoServico(DbContexto contexto)
     {
         _contexto = contexto;
     }
-    public void Apagar(Veiculo veiculo)
-    {
-        _contexto.Veiculos.Remove(veiculo);
-        _contexto.SaveChanges();
-    }
 
-    public void Atualizar(Veiculo veiculo)
-    {
-        _contexto.Veiculos.Update(veiculo);
-        _contexto.SaveChanges();
-    }
-    public Veiculo? BuscaPorId(int id)
-    {
-        return _contexto.Veiculos.Where(v => v.Id == id).FirstOrDefault();
-    }
-
-    public Veiculo? BuscarPorId(int id)
-    {
-        return _contexto.Veiculos.Where(v => v.Id == id).FirstOrDefault();
-    }
-
-    public void Incluir(Veiculo veiculo)
+    public async Task IncluirAsync(Veiculo veiculo)
     {
         _contexto.Veiculos.Add(veiculo);
-        _contexto.SaveChanges();
+        await _contexto.SaveChangesAsync();
     }
-    public List<Veiculo> Todos(int? pagina = 1, string? nome = null, string? marca = null, int? ano = null)
+
+    public async Task AtualizarAsync(Veiculo veiculo)
+    {
+        _contexto.Veiculos.Update(veiculo);
+        await _contexto.SaveChangesAsync();
+    }
+
+    public async Task ApagarAsync(Veiculo veiculo)
+    {
+        _contexto.Veiculos.Remove(veiculo);
+        await _contexto.SaveChangesAsync();
+    }
+
+    public async Task<Veiculo?> BuscarPorIdAsync(int id)
+    {
+        return await _contexto.Veiculos.FirstOrDefaultAsync(v => v.Id == id);
+    }
+
+    public async Task<List<Veiculo>> TodosAsync(int? pagina = 1, string? nome = null)
     {
         var query = _contexto.Veiculos.AsQueryable();
+
         if (!string.IsNullOrEmpty(nome))
-            query = query.Where(v => EF.Functions.Like(v.Nome.ToLower(), $"%{nome}%"));
+        {
+            query = query.Where(v => v.Nome.ToLower().Contains(nome.ToLower()));
+        }
+            
         int itensPorPagina = 10;
-        if (pagina != null)
+        if (pagina != null && pagina > 0)
+        {
             query = query.Skip(((int)pagina - 1) * itensPorPagina).Take(itensPorPagina);
-        return query.ToList();
+        }
+            
+        return await query.ToListAsync();
     }
 }

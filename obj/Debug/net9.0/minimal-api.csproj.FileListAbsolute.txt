@@ -138,3 +138,5 @@ C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\bin\Debug\net9.0\Microsoft
 C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\bin\Debug\net9.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\bin\Debug\net9.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\obj\Debug\net9.0\minimal-api.sourcelink.json
+C:\Users\user\Documents\Estudos\DotnetApi\minimal-api\bin\Debug\net9.0\BCrypt.Net-Next.dll
